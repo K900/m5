@@ -12,6 +12,7 @@ from m5.core.event.messaging import reply, TARGET_SAME
 YOUTUBE_API_KEY = "AIzaSyCGl9L2uRkZfces3fCWShLt3G-cJq4rmSs"
 LOG = logging.getLogger('m5.plugin.meta')
 
+
 def youtube_loader(url, query):
     youtube_url = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&part=snippet,contentDetails'
 
@@ -67,6 +68,7 @@ loaders = {
 try:
     # noinspection PyUnresolvedReferences
     from m5.plugins import help
+
     help.plugin_pages['meta'] = '''
     Automatically inserts metadata for links to some websites.
     Currently supported domains: {}

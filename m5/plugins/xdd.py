@@ -4,6 +4,7 @@ from m5.plugins.command_dispatcher import command
 
 __author__ = 'K900'
 
+
 @command('xdd')
 def get_word(message):
     """

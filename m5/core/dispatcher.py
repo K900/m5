@@ -57,7 +57,6 @@ def unload_module(module):
                 new_events.append(e)
         event[:] = new_events
 
-
     LOG.info('Success!')
 
 
@@ -91,7 +90,7 @@ def fire(event, data):
 
 def loop(once=False):
     LOG.info('Starting message loop...')
-    while (not q.empty() if once else True):
+    while not q.empty() if once else True:
         if q.empty():
             continue
 

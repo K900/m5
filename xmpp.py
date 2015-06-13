@@ -113,6 +113,7 @@ def on_muc_message(stanza):
                 True
             ))
 
+
 client.add_event_handler('groupchat_message', on_muc_message)
 
 # Provide version information
@@ -135,6 +136,7 @@ def on_start(_):
 
         rooms[item['jid']] = XMPPChatroom(client, item['jid'])
 
+
 client.add_event_handler('session_start', on_start)
 
 
@@ -146,6 +148,7 @@ def on_message(stanza):
             get_user(stanza['from']),
             False
         ))
+
 
 client.add_event_handler('message', on_message)
 client.add_event_handler('ssl_invalid_cert', lambda *args: None)
@@ -160,11 +163,13 @@ client.connect()
 dispatcher.fire('xmpp.client_ready', client)
 LOG.info('Connected!')
 
+
 @command('stop')
 @requires(permissions.SUPERUSER)
 def stop(_):
     dispatcher.fire('stop', None)
     client.disconnect()
+
 
 LOG.info('Starting event loop...')
 client.process()

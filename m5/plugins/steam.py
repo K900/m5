@@ -1,6 +1,6 @@
 import random
 
-from lxml import etree, html
+from lxml import etree
 import requests
 from m5.core.event.messaging import reply, TARGET_SAME, TARGET_BROADCAST, TARGET_PRIVATE
 from m5.core.permissions import check
@@ -37,15 +37,12 @@ def random_game(message):
 
 
 def load_deals():
-    def _load_html(url, **kwargs):
-        return html.fromstring(requests.get(url, **kwargs).text)
-
-    deals = {'daily': [], 'flash': []}
+    _deals = {'daily': [], 'flash': []}
 
     daily = requests.get('http://store.steampowered.com/api/featured/').json()
     for item in daily['large_capsules']:
         if item['discount_percent']:
-            deals['daily'].append({
+            _deals['daily'].append({
                 'name': item['name'],
                 'discount': item['discount_percent'],
                 'id': item['id'],
@@ -54,7 +51,8 @@ def load_deals():
                 'linux': 'L' if item['linux_available'] else ''
             })
 
-    return deals
+    return _deals
+
 
 @command('deals')
 def deals(message):
@@ -72,16 +70,15 @@ def deals(message):
     else:
         target = TARGET_PRIVATE
 
-    DEAL = '    [{win}{mac}{linux}] {name}: {discount}% off [ steam://advertise/{id} ]\n'
-
-    deals = load_deals()
+    deal = '    [{win}{mac}{linux}] {name}: {discount}% off [ steam://advertise/{id} ]\n'
+    _deals = load_deals()
 
     deal_text = "\nDaily deals:\n"
-    for item in deals['daily']:
-        deal_text += DEAL.format(**item)
+    for item in _deals['daily']:
+        deal_text += deal.format(**item)
 
     deal_text += "Flash sales / community choice:\n"
-    for item in deals['flash']:
-        deal_text += DEAL.format(**item)
+    for item in _deals['flash']:
+        deal_text += deal.format(**item)
 
     reply(deal_text, message, target=target)

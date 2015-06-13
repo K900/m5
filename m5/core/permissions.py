@@ -16,9 +16,10 @@ class UnknownIdentity(Exception):
 def _ensure_registered(fn):
     @functools.wraps(fn)
     def wrapper(identity, *args, **kwargs):
-        if not identity in _permissions:
+        if identity not in _permissions:
             register(identity)
         return fn(identity, *args, **kwargs)
+
     return wrapper
 
 
@@ -30,7 +31,7 @@ def _auto_register(data):
 
 def register(identity):
     LOG.debug('Creating new permission set for identity {}'.format(identity))
-    if not identity in _permissions:
+    if identity not in _permissions:
         _permissions[identity] = set()
 
 
@@ -59,7 +60,7 @@ def check(identity, *permissions):
         return True
     else:
         for required_permission in permissions:
-            if not required_permission in _permissions[identity]:
+            if required_permission not in _permissions[identity]:
                 LOG.debug('Not verifying permission {} for identity {}'.format(required_permission, identity))
                 return False
         LOG.debug('Verifying permissions {} for identity {}'.format(', '.join(permissions), identity))
