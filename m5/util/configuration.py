@@ -16,7 +16,7 @@ def load_config(name, schema=None):
         LOG.warning('Attempted to load non-existent configuration file {}'.format(name))
         data = {}
 
-    if schema:
+    if schema and data:
         return schema.validate(data)
     else:
         return data

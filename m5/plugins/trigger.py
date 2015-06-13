@@ -37,18 +37,19 @@ Action.create_table(fail_silently=True)
 
 @on('message')
 def trigger(message):
-    for pair in config['trigger']:
-        if re.search(pair['regex'], message.text):
-            if pair.get('once', True):
-                i = message.source.identity
-                r = pair['regex']
-                m = pair['message']
-                if Action.select() \
-                        .where(Action.identity == i) \
-                        .where(Action.regex == r) \
-                        .where(Action.message == m).count() == 0:
-                    LOG.debug('Sent one-time message to user {}:\n{}'.format(i, m))
-                    Action.create(identity=i, regex=r, message=m)
+    if config:
+        for pair in config['trigger']:
+            if re.search(pair['regex'], message.text):
+                if pair.get('once', True):
+                    i = message.source.identity
+                    r = pair['regex']
+                    m = pair['message']
+                    if Action.select() \
+                            .where(Action.identity == i) \
+                            .where(Action.regex == r) \
+                            .where(Action.message == m).count() == 0:
+                        LOG.debug('Sent one-time message to user {}:\n{}'.format(i, m))
+                        Action.create(identity=i, regex=r, message=m)
+                        reply(pair['message'], message)
+                else:
                     reply(pair['message'], message)
-            else:
-                reply(pair['message'], message)
