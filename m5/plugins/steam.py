@@ -44,14 +44,15 @@ def load_deals():
 
     daily = requests.get('http://store.steampowered.com/api/featured/').json()
     for item in daily['large_capsules']:
-        deals['daily'].append({
-            'name': item['name'],
-            'discount': item['discount_percent'],
-            'id': item['id'],
-            'win': 'W' if item['windows_available'] else '',
-            'mac': 'M' if item['mac_available'] else '',
-            'linux': 'L' if item['linux_available'] else ''
-        })
+        if item['discount_percent']:
+            deals['daily'].append({
+                'name': item['name'],
+                'discount': item['discount_percent'],
+                'id': item['id'],
+                'win': 'W' if item['windows_available'] else '',
+                'mac': 'M' if item['mac_available'] else '',
+                'linux': 'L' if item['linux_available'] else ''
+            })
 
     return deals
 
