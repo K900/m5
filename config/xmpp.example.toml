@@ -1,0 +1,6 @@
+jid = "username@domain.com"
+password = "Correct Horse Battery Staple"
+nickname = "m5"
+
+[[rooms]]
+jid = "chat@muc.domain.com"
